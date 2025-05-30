@@ -9,10 +9,6 @@ export default function Home() {
   const TMDBVideoUrl = "https://api.themoviedb.org/3/movie/552524/videos"; // 비디오 불러오는 url
   const { detailData, movieList } = useTMDBMovies(TMDBApiurl, TMDBApiKey); // 인기영화 불러오기기
   const LoadVideokey = useFetchTMDBOneData(TMDBVideoUrl, TMDBApiKey); // VideoKey 불러오기기
-
-  console.log("인기영화리스트: ", movieList);
-  console.log("영화디테일정보: ", detailData);
-
   useEffect(() => {
     const key = LoadVideokey?.results?.[0]?.key;
     setVideo(key);

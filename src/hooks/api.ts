@@ -75,9 +75,7 @@ export const useFetchTMDBMultData = (
             })
           )
         );
-        console.log(result);
         setData(result.map((res) => res.data));
-        console.log(data);
       } catch (err) {
         console.log(err);
       }
@@ -106,7 +104,6 @@ export const useFetchTMDBOneData = (apiurl: string, TMDBApiKey: string) => {
         console.error("TMDB 데이터 가져오기 실패:", err);
       }
     };
-
     fetchData();
   }, [apiurl, TMDBApiKey]);
 
