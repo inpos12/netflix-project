@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #141414;
+  overflow-x: hidden;
+  font-family: "Noto Sans KR", sans-serif;
+}
