@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import NetflixLogo from "@/assets/Netflix.png";
 import { Container, Row } from "@/components/Container";
 import MainImage from "@/assets/main_image.jpg";
@@ -27,6 +27,22 @@ export const MainContainer = styled.div`
 `;
 
 export default function Layout() {
+  useEffect(() => {
+    const header = document.querySelector("header");
+    const handleScroll = () => {
+      if (!header) {
+        return;
+      }
+      if (window.scrollY === 0) {
+        header.style.position = "static";
+      } else {
+        header.style.position = "fixed";
+        header.style.zIndex = "1000";
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+  }, []);
   return (
     <header className=" fixed w-full bg-[#141414]">
       <Container>
