@@ -44,14 +44,14 @@ export default function Layout() {
     handleScroll();
   }, []);
   return (
-    <header className=" fixed w-full bg-[#141414]">
+    <header className="fixed w-full bg-[#141414]">
       <Container>
-        <Row className="p-4 z-10">
-          <div className="w-4/5 justify-start flex">
-            <img className="w-44 " src={NetflixLogo} alt="Logo" />
+        <Row className="z-10 p-4">
+          <div className="flex w-4/5 justify-start">
+            <img className="w-44" src={NetflixLogo} alt="Logo" />
           </div>
-          <div className="w-1/5 justify-end items-center flex">
-            <button className="p-2 bg-red-700 text-white font-semibold rounded-xl">
+          <div className="flex w-1/5 items-center justify-end">
+            <button className="rounded-xl bg-red-700 p-2 font-semibold text-white">
               로그인
             </button>
           </div>
