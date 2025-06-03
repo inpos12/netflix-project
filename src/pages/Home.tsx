@@ -4,8 +4,12 @@ import { Container, Row } from "@/components/Container";
 import MovieGrid from "@/components/Movie/MovieGrid";
 import { useTMDBMovies } from "@/hooks/useTMDBMovies";
 import { useTMDBTV } from "@/hooks/useTMDBTV";
+import { fetchTMDBVideoList } from "@/hooks/useFetchTMDBMultiVideoData";
 
 export default function Home() {
+  //
+  const [multiVideoKey, setMultiVideoKey] = useState<any[]>([]);
+  const [multiTVKey, setMultiTVKey] = useState<any[]>([]);
   const [videoId, setVideoId] = useState("");
   const [videoKey, setVideoKey] = useState(""); // 비디오키를 담는 상태
   // 영화목록 API URL
@@ -31,14 +35,39 @@ export default function Home() {
     const key = LoadVideokey?.results?.[0]?.key;
     setVideoKey(key); //비디오 key 상태에 저장
   }, [LoadVideokey]);
+  useEffect(() => {
+    const getVideoData = async () => {
+      const Movieids = movieDetailData.map((res: any) => res.id);
+      const results = await fetchTMDBVideoList("movie", Movieids); // ✅ await 사용
+
+      const data = results.map((res: any) => res?.data?.results?.[0]?.key);
+      setMultiVideoKey(data);
+    };
+    if (movieDetailData?.length > 0) {
+      getVideoData();
+    }
+  }, [movieDetailData]);
+
+  useEffect(() => {
+    const getTVData = async () => {
+      const TVids = tvDetailData.map((res: any) => res.id);
+      const results = await fetchTMDBVideoList("tv", TVids); // ✅ await 사용
+      console.log(results);
+      const data = results.map((res: any) => res?.data?.results?.[0]?.key);
+      setMultiTVKey(data);
+    };
+    if (movieDetailData?.length > 0) {
+      getTVData();
+    }
+  }, [tvDetailData]);
 
   return (
     <>
-      <Container className="flex justify-center items-center flex-col mb-96">
+      <Container className="mb-96 flex flex-col items-center justify-center">
         <Row>
           {videoKey && (
             <iframe
-              className="w-full h-[85vh]"
+              className="h-[85vh] w-full"
               width="100%"
               height="1080"
               src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&rel=0&controls=0&modestbranding=0`}
@@ -49,11 +78,13 @@ export default function Home() {
           )}
         </Row>
         <MovieGrid
+          videokey={multiVideoKey}
           movieList={movieList}
           detailData={movieDetailData}
           maintitle="인기영화"
         />
         <MovieGrid
+          videokey={multiTVKey}
           movieList={tvList}
           detailData={tvDetailData}
           maintitle="인기드라마"
