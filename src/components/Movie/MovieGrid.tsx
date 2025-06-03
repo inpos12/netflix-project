@@ -1,4 +1,11 @@
 import { Row } from "../Container";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+// Import Swiper styles
+
 type Movie = {
   id: number;
   poster_paty: string;
@@ -14,49 +21,100 @@ type MovieProps = {
   movieList: Movie[];
   detailData: DetailData[];
   maintitle: string;
+  videokey: string[];
 };
 
 export const MovieGrid: React.FC<MovieProps> = (props) => {
   return (
     <>
-      <Row className="flex-col relative px-4">
+      <Row className="relative flex-col px-4">
+        <h1 className="py-5 text-fluid-lg text-white">{props.maintitle}</h1>
         {props.movieList ? (
           <>
-            <h1 className="text-fluid-lg text-white py-5">{props.maintitle}</h1>
-            <div className="relative cursor-pointer grid grid-cols-2 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-6 gap-2 w-full ">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              slidesPerView={6.5}
+              spaceBetween={20}
+              navigation
+              slidesPerGroup={3}
+              className="w-full"
+              breakpoints={{
+                320: {
+                  slidesPerView: 1.5,
+                  spaceBetween: 10,
+                  slidesPerGroup: 1,
+                },
+                640: {
+                  slidesPerView: 2.5,
+                  spaceBetween: 12,
+                  slidesPerGroup: 2,
+                },
+                768: {
+                  slidesPerView: 3.5,
+                },
+                1024: {
+                  slidesPerView: 4.5,
+                },
+                1280: {
+                  slidesPerView: 5.5,
+                },
+                1536: {
+                  slidesPerView: 6.5,
+                },
+              }}
+            >
               {props.movieList.map((list: any, index: number) => {
                 const detail = props.detailData.find(
-                  (item: any) => item.id === list.id
+                  (item: any) => item.id === list.id,
                 );
+                const videoKey = props.videokey[index]; // 🎯 인덱스 기준으로 매칭
                 return (
-                  <div className="group relative" key={index}>
-                    <img
-                      src={
-                        list.poster_path
-                          ? `https://image.tmdb.org/t/p/w500/${list.poster_path}`
-                          : ""
-                      }
-                    />
-                    {/* Hover 카드보이기 */}
-                    <div className="shadow-hover-card rounded-xl absolute z-50 top-0 w-full group-hover:scale-105 bg-[#181818] hidden group-hover:block transition-all duration-500">
+                  <SwiperSlide
+                    className="group relative cursor-pointer"
+                    key={index}
+                  >
+                    <div className="h-[400px] w-full">
                       <img
-                        style={{
-                          borderTopRightRadius: "0.75rem",
-                          borderTopLeftRadius: "0.75rem",
-                        }}
+                        className="h-full w-full object-cover"
                         src={
                           list.poster_path
-                            ? `https://image.tmdb.org/t/p/original/${list.poster_path}`
+                            ? `https://image.tmdb.org/t/p/w500/${list.poster_path}`
                             : ""
                         }
-                        className="text-white text-fluid-xl"
                       />
+                    </div>
+                    {/* Hover 카드보이기 */}
+
+                    <div className="absolute top-0 z-10 hidden h-full w-full bg-[#181818] shadow-hover-card transition-all duration-500 group-hover:block">
+                      {videoKey ? (
+                        <>
+                          <iframe
+                            className="max-h-[calc(100%-100px)] w-full"
+                            width="100%"
+                            height="1080"
+                            src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&rel=0&controls=0&modestbranding=0`}
+                            title="YouTube video"
+                            allow="autoplay; encrypted-media"
+                            allowFullScreen
+                          />
+                        </>
+                      ) : (
+                        <img
+                          className="max-h-[calc(100%-100px)] w-full object-cover object-center"
+                          src={
+                            list.poster_path
+                              ? `https://image.tmdb.org/t/p/w500/${list.poster_path}`
+                              : ""
+                          }
+                        />
+                      )}
+
                       {detail ? (
-                        <div className="px-2 py-4 grid gap-2 ">
+                        <div className="h-[calc(100% - 100px)] grid gap-2 px-2 py-4">
                           <h2 className="text-fluid-xxs text-white">
                             {list.title ? list.title : list.name}
                           </h2>
-                          <div className=" flex justify-between">
+                          <div className="flex justify-between">
                             <span className="text-fluid-sm text-darkgray">
                               {detail.runtime
                                 ? `${detail.runtime}분`
@@ -66,10 +124,10 @@ export const MovieGrid: React.FC<MovieProps> = (props) => {
                               {Math.round(detail.vote_average * 10) / 10}점
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-2 gap-1">
                             {detail.genres.map((genres: any, index: any) => (
                               <span
-                                className="text-darkgray font-semibold text-fluid-xxs text-nowrap"
+                                className="text-nowrap text-fluid-xxs font-semibold text-darkgray"
                                 key={index}
                               >
                                 {genres.name}
@@ -81,10 +139,10 @@ export const MovieGrid: React.FC<MovieProps> = (props) => {
                         <h1>데이터없음</h1>
                       )}
                     </div>
-                  </div>
+                  </SwiperSlide>
                 );
               })}
-            </div>
+            </Swiper>
           </>
         ) : (
           <h1>MovieList 데이터없음</h1>
