@@ -19,7 +19,7 @@ export const useTMDBMovies = (apiurl: string) => {
             Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
           },
         });
-        setMovieList(result.data.results.slice(0, 6));
+        setMovieList(result.data.results.slice(0, 18));
       } catch (err) {
         console.log(err);
       }

@@ -21,7 +21,7 @@ export const useTMDBTV = (apiurl: string) => {
             Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
           },
         });
-        setTVList(result.data.results.slice(0, 6));
+        setTVList(result.data.results.slice(0, 18));
       } catch (err) {
         console.log("드라마목록불러오가실패", err);
       }

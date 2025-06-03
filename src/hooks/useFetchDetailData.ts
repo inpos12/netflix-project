@@ -13,8 +13,8 @@ export const usefetchDetailData = async (list: any[] | null, type: string) => {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
           },
-        })
-      )
+        }),
+      ),
     );
     return DetailResult.map((res) => res.data);
   } catch (err) {
